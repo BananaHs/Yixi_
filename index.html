@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yi Xi enter code</title>
+
+  <style>
+    /* ===== CORES ===== */
+    :root{
+      --vinho:#3b0b0b;
+      --sangue:#7b0f0f;
+      --accent:#ff3b3b;
+      --whiteish:#f7f7f7;
+    }
+
+    body, html{
+      margin:0;
+      padding:0;
+      height:100%;
+      background:#000;
+      color:var(--whiteish);
+      font-family:Arial, Helvetica, sans-serif;
+      overflow:hidden;
+    }
+
+    /* ===== PÁGINA PRINCIPAL ===== */
+    .page{
+      position:relative;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background-image:url('background.png');
+      background-size:cover;
+      background-position:center;
+    }
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,0.7);
+    }
+
+    .box{
+      position:relative;
+      z-index:10;
+      background:rgba(59,11,11,0.7);
+      padding:25px;
+      border-radius:12px;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:0 20px 60px rgba(0,0,0,0.8);
+    }
+
+    input{
+      padding:12px;
+      font-size:20px;
+      width:150px;
+      text-align:center;
+      border-radius:8px;
+      border:2px solid rgba(255,255,255,0.2);
+      background:rgba(0,0,0,0.4);
+      color:var(--whiteish);
+      letter-spacing:6px;
+    }
+
+    button{
+      padding:10px 18px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:bold;
+      background:var(--accent);
+      color:#111;
+      margin-left:10px;
+    }
+
+    /* ===== SUCESSO ===== */
+    .success, .fail{
+      display:none;
+      position:fixed;
+      inset:0;
+      align-items:center;
+      justify-content:center;
+      z-index:200;
+      text-align:center;
+      padding:20px;
+    }
+
+    .success h2{
+      color:var(--accent);
+      font-size:38px;
+      text-shadow:0 0 20px var(--accent);
+    }
+
+    /* ===== FALHA (GLITCH + SANGUE + GRITO) ===== */
+    .fail{
+      background:#000;
+      flex-direction:column;
+    }
+
+    .fail h2{
+      font-size:60px;
+      margin-bottom:20px;
+    }
+
+    /* glitch */
+    .glitch{
+      animation:glitch 10.5s infinite;
+    }
+
+    @keyframes glitch{
+      10%{ transform:translate(1); filter:hue-rotate(0deg); }
+      20%{ transform:translate(-4px, 4px); filter:hue-rotate(40deg); }
+      40%{ transform:translate(4px, -4px); filter:hue-rotate(-40deg); }
+      60%{ transform:translate(-3px, 2px); }
+      80%{ transform:translate(3px, -2px); }
+      100%{ transform:translate(0); filter:hue-rotate(0deg); }
+    }
+
+    /* gotas caindo */
+    .blood-drop{
+      position:absolute;
+      top:-40px;
+      width:15px;
+      height:20px;
+      background:var(--sangue);
+      border-radius:50%;
+      animation:fall 7s linear infinite;
+      box-shadow:0 5px 15px rgba(255,0,0,0.4);
+    }
+
+    @keyframes fall{
+      0%{ top:-40px; opacity:1; }
+      100%{ top:110%; opacity:0; }
+    }
+
+    .btn{
+      padding:10px 16px;
+      margin-top:20px;
+      background:rgba(255,255,255,0.1);
+      border:none;
+      border-radius:8px;
+      color:white;
+      cursor:pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+    <div class="overlay"></div>
+
+    <div class="box">
+      <h1>coloque 'N' antes dk número</h1>
+      <p>enter code:</p>
+
+      <input id="code" maxlength="4" placeholder="----">
+      <button onclick="checkCode()">!here!</button>
+    </div>
+  </div>
+
+  <!-- SUCESSO -->
+  <div class="success" id="successScreen">
+    <h2>https://drive.google.com/file/
+    d/1RQu3t8qkq9ejj0a2jhjDUtDKcWwOQ-_5/
+    view?usp=drivesdk</h2>
+    <button class="btn" onclick="resetAll()">tentar novamente?</button>
+  </div>
+
+  <!-- FALHA -->
+  <div class="fail" id="failScreen">
+    <h2 class="glitch">VOCÊ ERROU
+    </h2>https://drive.google.com/
+    file/d/1lJmieA5TA3GTng7D4-5rMcn_bI4b6GaH
+    /view?usp=drivesdk
+
+    <!-- gotas -->
+    <div id="bloodArea"></div>
+
+    <button class="btn" onclick="resetAll()">você consegue, tente de novo</button>
+  </div>
+
+  <!-- áudio do grito -->
+  <audio id="scream" src="susto.mp3" preload="auto"></audio>
+
+<script>
+
+function checkCode(){
+  const val = document.getElementById('code').value.toUpperCase();
+
+  if(val === "N847"){
+    document.getElementById("successScreen").style.display="flex";
+  } else {
+    showFail();
+  }
+}
+
+function showFail(){
+  const fail = document.getElementById("failScreen");
+  fail.style.display="flex";
+
+  // toque o grito
+  const scream = document.getElementById("scream");
+  scream.currentTime = 0;
+  scream.play();
+
+  // gerar gotas
+  const area = document.getElementById("bloodArea");
+  area.innerHTML = "";
+
+  for(let i=0; i<15; i++){
+    const drop = document.createElement("div");
+    drop.classList.add("blood-drop");
+    drop.style.left = Math.random()*100 + "%";
+    drop.style.animationDuration = (1.5 + Math.random()*1.5) + "s";
+    area.appendChild(drop);
+  }
+}
+
+function resetAll(){
+  document.getElementById("failScreen").style.display="none";
+  document.getElementById("successScreen").style.display="none";
+  document.getElementById("code").value = "";
+}
+
+</script>
+
+</body>
+</html>
