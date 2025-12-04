@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Senha 4 Dígitos</title>
+<style>
+    body {
+        margin: 0;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        transition: 0.3s;
+        overflow: hidden;
+    }
+
+    #container {
+        text-align: center;
+    }
+
+    input {
+        font-size: 22px;
+        padding: 10px;
+        width: 150px;
+        text-align: center;
+        border-radius: 10px;
+        border: 2px solid black;
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* ERRO — tela preta + tremedeira */
+    .erro {
+        background: black !important;
+        animation: tremer 0.05s infinite;
+    }
+
+    @keyframes tremer {
+        0% { transform: translate(2px, -2px); }
+        50% { transform: translate(-2px, 2px); }
+        100% { transform: translate(2px, 1px); }
+    }
+
+    #binario {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        color: #00ff00;
+        font-size: 20px;
+        display: none;
+        opacity: 0.6;
+        pointer-events: none;
+        animation: tremedigit 0.05s infinite;
+        white-space: pre-wrap;
+    }
+
+    @keyframes tremedigit {
+        0% { transform: translateX(-2px); }
+        100% { transform: translateX(2px); }
+    }
+
+    /* MODO ROSA */
+    .fofo {
+        background: pink !important;
+    }
+
+    /* MODO AMARELO */
+    .amarelo {
+        background: yellow !important;
+        position: relative;
+    }
+
+    .bolinha {
+        width: 20px;
+        height: 20px;
+        background: red;
+        border-radius: 50%;
+        position: absolute;
+        animation: cair 2s linear infinite;
+    }
+
+    @keyframes cair {
+        0% { transform: translateY(-30px); }
+        100% { transform: translateY(110vh); }
+    }
+
+    #msg {
+        position: fixed;
+        top: 20px;
+        font-size: 26px;
+        font-weight: bold;
+        color: black;
+        width: 100%;
+        text-align: center;
+        display: none;
+        pointer-events: none;
+    }
+</style>
+</head>
+<body>
+
+<div id="binario"></div>
+<div id="msg"></div>
+
+<div id="container">
+    <h2>Digite a senha:</h2>
+    <input id="senha" maxlength="4">
+    <br>
+    <button onclick="reiniciar()">Reiniciar</button>
+</div>
+
+<script>
+const input = document.getElementById("senha");
+const bin = document.getElementById("binario");
+const body = document.body;
+const msg = document.getElementById("msg");
+
+let intervaloBinario = null;
+let chuvaAtiva = null;
+
+input.addEventListener("input", () => {
+    const val = input.value;
+
+    if (val.length === 4) {
+        if (val === "6637") {
+            modoFofo();
+        } else if (val === "0104") {
+            modoAmarelo();
+        } else {
+            modoErro();
+        }
+    }
+});
+
+function modoFofo() {
+    resetar();
+    body.classList.add("fofo");
+
+    alert("virus.hs.exp added -opa, codigo errado-");
+    msg.textContent = "wiwiwiwi";
+    msg.style.display = "block";
+}
+
+function modoAmarelo() {
+    resetar();
+    body.classList.add("amarelo");
+
+    alert("virus.exe.hp added ⚠️");
+    msg.textContent = "https://pt.quizur.com/trivia/ebaaa-coisinha-final-d-1rehJ";
+    msg.style.display = "block";
+
+    chuvaAtiva = setInterval(() => {
+        criarBolinha();
+    }, 200);
+}
+
+function criarBolinha() {
+    let b = document.createElement("div");
+    b.classList.add("bolinha");
+
+    b.style.left = Math.random() * 100 + "vw";
+    b.style.top = "-30px";
+
+    document.body.appendChild(b);
+
+    setTimeout(() => b.remove(), 3000);
+}
+
+function modoErro() {
+    resetar();
+    body.classList.add("erro");
+    bin.style.display = "block";
+
+    intervaloBinario = setInterval(() => {
+        bin.textContent = gerarBinario(400);
+    }, 50);
+}
+
+function gerarBinario(tam) {
+    let s = "";
+    for (let i = 0; i < tam; i++) {
+        s += Math.random() > 0.5 ? "1" : "0";
+    }
+    return s;
+}
+
+function resetar() {
+    body.className = "";
+    bin.style.display = "none";
+    msg.style.display = "none";
+
+    clearInterval(intervaloBinario);
+    clearInterval(chuvaAtiva);
+
+    document.querySelectorAll(".bolinha").forEach(b => b.remove());
+}
+
+function reiniciar() {
+    resetar();
+    input.value = "";
+}
+</script>
+
+</body>
+</html>
